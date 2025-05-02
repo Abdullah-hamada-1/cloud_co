@@ -19,7 +19,7 @@ const s3 = new S3Client({
 });
 
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "templates"));
+app.set("views", path.join(__dirname, "views"));
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
