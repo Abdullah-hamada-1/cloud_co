@@ -7,11 +7,10 @@ const path = require("path");
 dotenv.config();
 
 const app = express();
-const upload = multer();
-
+const upload = multer(); // Initialize multer (in-memory storage)
 
 const s3 = new S3Client({
-  region: "us-east-1",
+  region: "us-east-1", // Ensure to use the correct AWS region
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
@@ -33,15 +32,14 @@ app.post("/", upload.single("file"), async (req, res) => {
     return res.render("upload", { message: "❌ لم يتم اختيار أي ملف." });
   }
 
- const params = {
-    Bucket: bucketName,
-    Key: 'your-file-key',
-    Body: 'your-file-content' 
-};
-
+  const params = {
+    Bucket: process.env.BUCKET_NAME, // Ensure this environment variable is set
+    Key: file.originalname, // Use the original filename from the uploaded file
+    Body: file.buffer // The file content (in memory buffer)
+  };
 
   try {
-    const data = await s3.send(new PutObjectCommand(params)); // Use the PutObjectCommand for uploading
+    const data = await s3.send(new PutObjectCommand(params)); // Upload the file to S3
     console.log(data);
     res.render("upload", { message: "✅ تم رفع الملف بنجاح إلى S3!" });
   } catch (err) {
@@ -55,4 +53,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(80, '0.0.0.0', () => {
   console.log('Server is running on http://0.0.0.0:80');
 });
-
