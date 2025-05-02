@@ -33,11 +33,12 @@ app.post("/", upload.single("file"), async (req, res) => {
     return res.render("upload", { message: "❌ لم يتم اختيار أي ملف." });
   }
 
-  const params = {
-    Bucket: process.env.BUCKET_NAME,
-    Key: file.originalname,
-    Body: file.buffer
-  };
+ const params = {
+    Bucket: bucketName,
+    Key: 'your-file-key',
+    Body: 'your-file-content' 
+};
+
 
   try {
     const data = await s3.send(new PutObjectCommand(params)); // Use the PutObjectCommand for uploading
