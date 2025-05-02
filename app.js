@@ -1,6 +1,6 @@
 const express = require("express");
 const multer = require("multer");
-const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3"); // Import v3 SDK
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const dotenv = require("dotenv");
 const path = require("path");
 
@@ -9,9 +9,9 @@ dotenv.config();
 const app = express();
 const upload = multer();
 
-// Initialize the AWS S3 client with v3 SDK
+
 const s3 = new S3Client({
-  region: "us-east-1",  // specify your region
+  region: "us-east-1",
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
@@ -51,6 +51,7 @@ app.post("/", upload.single("file"), async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+app.listen(80, '0.0.0.0', () => {
+  console.log('Server is running on http://0.0.0.0:80');
 });
+
